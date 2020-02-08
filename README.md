@@ -27,4 +27,5 @@ server=127.0.0.1#5553
 LICENSE
 ----------------------
 
-DNSForwarder is distributed under the MIT license.
+This is a fork of uleelx/dnsforwarder
+Filtering-Multi-DNS-Forwarder is distributed under the MIT license.
