@@ -18,9 +18,10 @@ INSTALL
 ---------------------
 
 Run the service with "lua dnsfilter.lua &"
-You can test it with: nslookup www.google.com 127.0.0.1%5553
+You can test it with: "nslookup www.google.com 127.0.0.1#5553"
 
 Point to this forwarder in your dnsmask config like this:
+
 server=127.0.0.1#5553
 
 LICENSE
