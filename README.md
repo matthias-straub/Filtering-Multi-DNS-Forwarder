@@ -28,4 +28,5 @@ LICENSE
 ----------------------
 
 This is a fork of uleelx/dnsforwarder
+
 Filtering-Multi-DNS-Forwarder is distributed under the MIT license.
