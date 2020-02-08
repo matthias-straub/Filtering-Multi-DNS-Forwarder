@@ -12,6 +12,7 @@ Dependencies
 ----------------------------
 
 This DNS forwarder requires lua and luasocket installed.
+It runs light weight even on small OpenWRT routers.
 
 INSTALL
 ---------------------
