@@ -1,5 +1,5 @@
 This DNS forwarder listens for incoming DNS queries and forwards them to multiple pairs of upstream DNS servers at the same time.
-It replies as soon as one of each pair of servers have answered.
+It replies as soon as one server of each pair of servers have answered.
 
 This allows to combine multiple filtering DNS services at the same time, thus adding the capabilities of services like Cisco Umbrella/OpenDNS, Quad9, Adguard DNS and others for a combination of malware filter, ad blocker and family shield.
 
