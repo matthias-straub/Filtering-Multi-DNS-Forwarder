@@ -6,7 +6,7 @@ This allows to combine multiple filtering DNS services at the same time, thus ad
 It runs super light weight on e.g. OpenWRT (with luasocket installed).
 It listens on UDP port 5553 and is meant to act as upstream resolver for a local caching DNS server like dnsmasq.
 
-DNS queries will always be answered with replies from the first pair of listed DNS servers (by default this is Quad9). Replies from the other pairs of upstream servers will only be returned if they point to blocking pages (or e.g. 0.0.0.0 or 127.0.0.1). So these other pairs of servers are only used for malware, content or ad filtering. The first pair of servers should be trustworthy as they do the actual DNS resolving.
+DNS queries will always be answered with replies from the first pair of listed DNS servers (by default this is Quad9). Replies from the other pairs of upstream servers will only be returned if they point to blocking pages (or e.g. 0.0.0.0 or 127.0.0.1). So these other pairs of servers are only used for filtering of malware, ads and other unwanted content. The first pair of servers should be trustworthy as it does the actual DNS resolving.
   
 Dependencies
 ----------------------------
