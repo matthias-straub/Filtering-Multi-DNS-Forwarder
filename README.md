@@ -1,7 +1,7 @@
 This DNS forwarder listens for incoming DNS queries and forwards them to multiple pairs of upstream DNS servers at the same time.
 It replies as soon as one server of each pair of servers have answered.
 
-This allows to combine multiple filtering DNS services at the same time, thus adding the capabilities of services like Cisco Umbrella/OpenDNS, Quad9, Adguard DNS and others for a combination of malware filter, ad blocker and family shield.
+This allows to combine multiple filtering DNS services at the same time, thus adding the capabilities of services like Cisco Umbrella/OpenDNS, Quad9, AdGuard DNS and others for a combination of malware filter, ad blocker and family shield.
 
 It runs super light weight on e.g. OpenWRT (with luasocket installed).
 It listens on UDP port 5553 and is meant to act as upstream resolver for a local caching DNS server like dnsmasq.
