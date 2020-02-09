@@ -29,6 +29,7 @@ INSTALL
 ---------------------
 
 Run the service with "lua dnsfilter.lua &"
+
 You can test it with: 
 "nslookup www.google.com 127.0.0.1#5553" on OpenWRT
 or "nslookup -port=5553 www.google.com 127.0.0.1" on Linux
