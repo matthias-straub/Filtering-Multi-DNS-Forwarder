@@ -22,14 +22,16 @@ DNS queries will always be answered with replies from the first pair of listed D
 Dependencies
 ----------------------------
 
-This DNS forwarder requires lua and luasocket installed.
+This DNS forwarder requires lua5.1 and lua-socket installed.
 It runs light weight even on small OpenWRT routers.
 
 INSTALL
 ---------------------
 
 Run the service with "lua dnsfilter.lua &"
-You can test it with: "nslookup www.google.com 127.0.0.1#5553"
+You can test it with: 
+"nslookup www.google.com 127.0.0.1#5553" on OpenWRT
+or "nslookup -port=5553 www.google.com 127.0.0.1" on Linux
 
 Point to this forwarder in your dnsmasq config like this:
 
