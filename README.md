@@ -1,6 +1,6 @@
 The Challenge
 -----------------------------
-Public DNS services that block phishing sites, malware sites, advertisements or pornography are great, as they can protect an entire household when configured on the local Internet router as an upstream DNS server. They are typically free and do not require additional hardware or in fact any resources. Nor do they negatively affect Internet access performance.
+Public DNS services that block phishing sites, malware sites, advertisements or pornography are great, as they can protect an entire household when configured on the local Internet router as an upstream DNS server. They are typically free for personal use and do not require additional hardware or in fact any resources. Nor do they negatively affect Internet access performance.
 
 They only significant downside with this is, that you have to choose one public DNS service to use in your home, as you typically cannot use more than one DNS service at the same time. This is unfortunate as different public DNS services have different strengths and weaknesses: Quad9 is great against malware and phishing but it does not filter pornography to protect your kids, nor does it block ads. OpenDNS/Umbrella adds a "Family Shield" to this but still does not block advertisements. AdGuard DNS is great against ads but might be less affective against malware. 
 
