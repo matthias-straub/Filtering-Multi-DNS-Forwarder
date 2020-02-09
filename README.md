@@ -1,9 +1,20 @@
+The Challenge
+-----------------------------
+Public DNS services that block phishing sites, malware sites, advertisements or pornography are great, as they can protect an entire household when configured on the local Internet router as an upstream DNS server. They are typically free and do not require additional hardware or in fact any resources. Nor do they negatively affect Internet access performance.
+
+They only significant downside with this is, that you have to choose one public DNS service to use in your home, as you typically cannot use more than one DNS service at the same time. This is unfortunate as different public DNS services have different strengths and weaknesses: Quad9 is great against malware and phishing but it does not filter pornography to protect your kids, nor does it block ads. OpenDNS/Umbrella adds a "Family Shield" to this but still does not block advertisements. AdGuard DNS is great against ads but might be less affective against malware. 
+
+It would be great to be able to combine the features of any number of public DNS service to one super DNS filtering service. Also this should be able to run on your existing Internet router with minimal resource requirements. There obviously should also not be a slow down of access speeds and you would also like to be able to choose which of the services you trust the most for the actual name resolution.
+
+The Solution
+-----------------------------
+
 This DNS forwarder listens for incoming DNS queries and forwards them to multiple pairs of upstream DNS servers at the same time.
 It replies as soon as one server of each pair of servers have answered.
 
-**This allows to combine multiple filtering DNS services at the same time, thus adding the capabilities of services like Cisco Umbrella/OpenDNS, Quad9, AdGuard DNS and others for a combination of malware filter, ad blocker and family shield.**
+**This allows to combine multiple filtering DNS services at the same time, thus adding the capabilities of services like Cisco Umbrella/OpenDNS, Quad9, AdGuard DNS and others for a combination of malware and phishing filter, ad blocker and family shield.**
 
-It runs super light weight on e.g. OpenWRT (with luasocket installed).
+It runs super light weight on e.g. OpenWRT (with luasocket installed) with only a few lines of lua code.
 It listens on UDP port 5553 and is meant to act as upstream resolver for a local caching DNS server like dnsmasq.
 
 DNS queries will always be answered with replies from the first pair of listed DNS servers (by default this is Quad9). Replies from the other pairs of upstream servers will only be returned if they point to blocking pages (or e.g. 0.0.0.0 or 127.0.0.1). So these other pairs of servers are only used for filtering of malware, ads and other unwanted content. The first pair of servers should be trustworthy as it does the actual DNS resolving.
