@@ -22,7 +22,7 @@ DNS queries will always be answered with replies from the first pair of listed D
 Dependencies
 ----------------------------
 
-This DNS forwarder requires lua5.1 and lua-socket installed.
+This DNS forwarder requires lua and lua-socket installed.
 It runs light weight even on small OpenWRT routers.
 
 INSTALL
