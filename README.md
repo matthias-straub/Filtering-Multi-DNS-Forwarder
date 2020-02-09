@@ -31,7 +31,7 @@ INSTALL
 Run the service with "lua dnsfilter.lua &"
 You can test it with: "nslookup www.google.com 127.0.0.1#5553"
 
-Point to this forwarder in your dnsmask config like this:
+Point to this forwarder in your dnsmasq config like this:
 
 server=127.0.0.1#5553
 
