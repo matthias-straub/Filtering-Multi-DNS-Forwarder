@@ -82,7 +82,7 @@ end
 
 local function main()
 
-  SERVNUM=table.getn(SERVERS)
+  SERVNUM=#SERVERS
   SERVFLAGS=(2^(SERVNUM/2))-1
 
   for _, ip in ipairs(BLOCK_IP) do
