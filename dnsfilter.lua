@@ -6,11 +6,11 @@ local task = task
 -- SERVERS need to be in pairs for redundancy (default: primary and secondary for each Adguard DNS, OpenDNS and Quad9)
 -- The first two servers should be the most trusted ones. Only replies from this pair of servers will be forwarded.
 -- Replies from other servers will only be forwarded when they direct to blocking pages
--- We trust Quad9 the most, so their two IPs come first
+-- We trust OpenDNS the most, so their two IPs come first
 local SERVERS = {
-  "9.9.9.9", "149.112.112.112",
+  "208.67.222.123", "208.67.220.123",
   "176.103.130.132", "176.103.130.134",
-  "208.67.222.123", "208.67.220.123"
+  "9.9.9.9", "149.112.112.112"
 }
 
 -- BLOCK_IPs are fake IPs that the dns services redirect blocked requests to. List all known IPs (default: Adguard, OpenDNS and Quad9)
@@ -47,6 +47,7 @@ local function replier(proxy, forwarder)
         end
         if BLOCK_IP[data:sub(-4)] or string.byte(data:sub(-4,-4))==0 then
          proxy:sendto(data, IP[ID], PORT[ID])
+         -- os.execute("logger Blocked "..DOMAIN[ID])
          IP[ID], PORT[ID], DOMAIN[ID], ANSWERS[ID], REPLY[ID] = nil, nil, nil, nil, nil
         elseif ANSWERS[ID]==SERVFLAGS then
          proxy:sendto(REPLY[ID], IP[ID], PORT[ID])
