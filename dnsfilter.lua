@@ -47,7 +47,7 @@ local function replier(proxy, forwarder)
         end
         if BLOCK_IP[data:sub(-4)] or string.byte(data:sub(-4,-4))==0 then
          proxy:sendto(data, IP[ID], PORT[ID])
-         -- os.execute("logger Blocked "..DOMAIN[ID])
+         -- if BLOCK_IP[data:sub(-4)] then os.execute("logger Blocked "..DOMAIN[ID].." "..SERVERS[server]) end
          IP[ID], PORT[ID], DOMAIN[ID], ANSWERS[ID], REPLY[ID] = nil, nil, nil, nil, nil
         elseif ANSWERS[ID]==SERVFLAGS then
          proxy:sendto(REPLY[ID], IP[ID], PORT[ID])
