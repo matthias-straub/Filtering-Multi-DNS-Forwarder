@@ -1,3 +1,5 @@
+-- Version 1.1 23.07.2021
+
 local socket = require("socket")
 
 if not task then dofile("task.lua") end
@@ -9,8 +11,8 @@ local task = task
 -- We trust OpenDNS the most, so their two IPs come first
 local SERVERS = {
   "208.67.222.123", "208.67.220.123",
-  "176.103.130.132", "176.103.130.134",
-  "9.9.9.9", "149.112.112.112"
+  "9.9.9.9", "149.112.112.112",
+  "176.103.130.132", "176.103.130.134"
 }
 
 -- BLOCK_IPs are fake IPs that the dns services redirect blocked requests to. List all known IPs (default: Adguard, OpenDNS and Quad9)
@@ -18,6 +20,13 @@ local BLOCK_IP = {
   "0.0.0.0", "146.112.61.104", "146.112.61.105", "146.112.61.106", "146.112.61.107", "146.112.61.108", "146.112.61.109", "146.112.61.110",
   "176.103.130.130", "176.103.130.131", "176.103.130.132", "176.103.130.133", "176.103.130.134", "176.103.130.135"
 }
+
+-- BLOCK_QTYPES is the list of query types to block. We do not like IOS14 using query Type 65
+local BLOCK_QTYPES = {
+  65
+}
+-- Helper array that will be filled with flags:
+local BLOCK_QTYPE = {}
 
 local SERVNUM, SERVFLAGS = 0, 0
 local IP, PORT, DOMAIN, ANSWERS, REPLY = {}, {}, {}, {}, {}
@@ -47,7 +56,7 @@ local function replier(proxy, forwarder)
         end
         if BLOCK_IP[data:sub(-4)] or string.byte(data:sub(-4,-4))==0 then
          proxy:sendto(data, IP[ID], PORT[ID])
-         -- if BLOCK_IP[data:sub(-4)] then os.execute("logger Blocked "..DOMAIN[ID].." "..SERVERS[server]) end
+         if BLOCK_IP[data:sub(-4)] then os.execute("logger Blocked "..DOMAIN[ID].." "..SERVERS[server]) end
          IP[ID], PORT[ID], DOMAIN[ID], ANSWERS[ID], REPLY[ID] = nil, nil, nil, nil, nil
         elseif ANSWERS[ID]==SERVFLAGS then
          proxy:sendto(REPLY[ID], IP[ID], PORT[ID])
@@ -67,15 +76,18 @@ local function listener(proxy, forwarder)
     if data and #data > 0 then
       local domain = (data:sub(14, -6):gsub("[^%w]", "."))
       local ID = data:sub(1, 2)
+      local QTYPE = string.byte(data:sub(-3,-2),1,1)+256*string.byte(data:sub(-4,-3),1,1)
       -- print(string.byte(ID,1),string.byte(ID,2), domain)
-      IP[ID], PORT[ID], DOMAIN[ID], ANSWERS[ID] = ip, port, domain, 0
-      for _, server in ipairs(SERVERS) do
-        local dns_ip, dns_port = string.match(server, "([^:]*):?(.*)")
-        dns_port = tonumber(dns_port) or 53
-        forwarder:sendto(data, dns_ip, dns_port)
+      if not BLOCK_QTYPE[QTYPE] then
+       IP[ID], PORT[ID], DOMAIN[ID], ANSWERS[ID] = ip, port, domain, 0
+       for _, server in ipairs(SERVERS) do
+         local dns_ip, dns_port = string.match(server, "([^:]*):?(.*)")
+         dns_port = tonumber(dns_port) or 53
+         forwarder:sendto(data, dns_ip, dns_port)
+       end
+       busy = true
+       if task.count() == 1 then task.go(replier, proxy, forwarder) end
       end
-      busy = true
-      if task.count() == 1 then task.go(replier, proxy, forwarder) end
     end
     task.sleep(0.02)
   end
@@ -88,6 +100,10 @@ local function main()
 
   for _, ip in ipairs(BLOCK_IP) do
     BLOCK_IP[ip:gsub("%d+", string.char):gsub("(.).", "%1")] = true
+  end
+
+  for _, qt in ipairs(BLOCK_QTYPES) do
+    BLOCK_QTYPE[qt] = true
   end
 
   for num, ip in ipairs(SERVERS) do
