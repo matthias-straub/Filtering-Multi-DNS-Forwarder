@@ -42,7 +42,7 @@ You also might want to resolve the blocking pages from Adguard or OpenDNS via th
 
 server=/opendns.com/208.67.222.123
 
-server=/adguard.com/176.103.130.132
+server=/adguard.com/94.140.14.33
 
 
 LICENSE
