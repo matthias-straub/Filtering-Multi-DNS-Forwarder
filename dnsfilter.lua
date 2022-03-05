@@ -1,4 +1,4 @@
--- Version 1.1 23.07.2021
+-- Version 1.12 05.03.2022
 
 local socket = require("socket")
 
@@ -12,13 +12,13 @@ local task = task
 local SERVERS = {
   "208.67.222.123", "208.67.220.123",
   "9.9.9.9", "149.112.112.112",
-  "176.103.130.132", "176.103.130.134"
+  "94.140.14.15", "94.140.15.16"
 }
 
 -- BLOCK_IPs are fake IPs that the dns services redirect blocked requests to. List all known IPs (default: Adguard, OpenDNS and Quad9)
 local BLOCK_IP = {
   "0.0.0.0", "146.112.61.104", "146.112.61.105", "146.112.61.106", "146.112.61.107", "146.112.61.108", "146.112.61.109", "146.112.61.110",
-  "176.103.130.130", "176.103.130.131", "176.103.130.132", "176.103.130.133", "176.103.130.134", "176.103.130.135"
+  "94.140.14.33", "94.140.14.35"
 }
 
 -- BLOCK_QTYPES is the list of query types to block. We do not like IOS14 using query Type 65
