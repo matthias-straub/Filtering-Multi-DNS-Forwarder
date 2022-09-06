@@ -38,11 +38,25 @@ Point to this forwarder in your dnsmasq config like this:
 
 server=127.0.0.1#5553
 
-You also might want to resolve the blocking pages from Adguard or OpenDNS via their local service:
+#You also might want to resolve the blocking pages from Adguard or OpenDNS via their local service:
 
 server=/opendns.com/208.67.222.123
 
 server=/adguard.com/94.140.14.33
+
+# Prevent Apple Private Relay
+
+host-record=mask-api.icloud.com,127.0.0.1
+
+host-record=mask-h2.icloud.com,127.0.0.1
+
+# Additional recommended settings
+
+dns-forward-max=300
+
+cache-size=10000
+
+strict-order
 
 
 LICENSE
