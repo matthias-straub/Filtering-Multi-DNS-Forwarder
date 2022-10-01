@@ -11,7 +11,7 @@ local task = task
 -- We trust OpenDNS the most, so their two IPs come first
 local SERVERS = {
   "208.67.222.123", "208.67.220.123",
-  "9.9.9.9", "149.112.112.112",
+--  "9.9.9.9", "149.112.112.112",
   "94.140.14.15", "94.140.15.16"
 }
 
