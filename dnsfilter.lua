@@ -1,4 +1,4 @@
--- Version 1.13 1.10.2022
+-- Version 1.14 23.3.2023
 
 local socket = require("socket")
 
@@ -11,6 +11,7 @@ local task = task
 -- We trust OpenDNS the most, so their two IPs come first
 local SERVERS = {
   "208.67.222.123", "208.67.220.123",
+--  "76.76.2.2", "76.76.10.2",
 --  "9.9.9.9", "149.112.112.112",
   "94.140.14.15", "94.140.15.16"
 }
@@ -54,9 +55,9 @@ local function replier(proxy, forwarder)
         if SERVERS[server]==1 then
          REPLY[ID]=data
         end
-        if BLOCK_IP[data:sub(-4)] or string.byte(data:sub(-4,-4))==0 then
+        if BLOCK_IP[data:sub(-4)] and string.byte(data:sub(-5,-5))==4 then
          proxy:sendto(data, IP[ID], PORT[ID])
-         if BLOCK_IP[data:sub(-4)] then os.execute("logger Blocked "..DOMAIN[ID].." "..SERVERS[server]) end
+         os.execute("logger Blocked "..DOMAIN[ID].." "..SERVERS[server])
          IP[ID], PORT[ID], DOMAIN[ID], ANSWERS[ID], REPLY[ID] = nil, nil, nil, nil, nil
         elseif ANSWERS[ID]==SERVFLAGS then
          proxy:sendto(REPLY[ID], IP[ID], PORT[ID])
@@ -128,4 +129,3 @@ local function main()
 end
 
 main()
-
