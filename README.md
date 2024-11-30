@@ -53,7 +53,7 @@ host-record=mask-h2.icloud.com,127.0.0.1
 
 #Additional recommended settings:
 
-dns-forward-max=300
+dns-forward-max=3000
 
 cache-size=10000
 
