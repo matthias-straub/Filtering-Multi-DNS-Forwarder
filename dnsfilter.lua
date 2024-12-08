@@ -1,4 +1,4 @@
--- Version 1.14 23.3.2023
+-- Version 1.2 1.12.2024
 
 local socket = require("socket")
 
@@ -41,6 +41,36 @@ function setflag(set, flag)
   return set + flag
 end
 
+
+local function get_question_type(data)
+    -- Helper function to convert a byte to an integer
+    local function byte_to_int(b)
+        return string.byte(b)
+    end
+
+    -- Start at the Question Section (after the 12-byte header)
+    local pos = 13
+
+    -- Parse the domain name
+    while byte_to_int(string.sub(data, pos, pos)) ~= 0 do
+        -- Get the length of the current label
+        local length = byte_to_int(string.sub(data, pos, pos))
+        -- Move past the label (length + 1 to include the length byte)
+        pos = pos + length + 1
+    end
+
+    -- Move past the null byte that terminates the domain name
+    pos = pos + 1
+
+    -- Read the Type field (2 bytes)
+    local type_hi = byte_to_int(string.sub(data, pos, pos))   -- High byte
+    local type_lo = byte_to_int(string.sub(data, pos + 1, pos + 1)) -- Low byte
+    local type_field = (type_hi * 256) + type_lo             -- Combine to get the Type
+
+    -- Return the Type as an integer
+    return type_field
+end
+
 local function replier(proxy, forwarder)
   local lifetime, interval = 5, 0.01
   repeat
@@ -48,11 +78,13 @@ local function replier(proxy, forwarder)
     local data,server,_ = forwarder:receivefrom()
     if data and #data > 0 then
       server=server:gsub("%d+", string.char):gsub("(.).", "%1")
+      local QTYPE = get_question_type(data)
+      -- print (QTYPE)
       local ID = data:sub(1, 2)
       if IP[ID] then
         ANSWERS[ID]=setflag(ANSWERS[ID],SERVERS[server])
         -- print (ID, DOMAIN[ID], ANSWERS[ID])
-        if SERVERS[server]==1 then
+        if (SERVERS[server]==1 and not BLOCK_QTYPE[QTYPE]) or (SERVERS[server]==2 and BLOCK_QTYPE[QTYPE]) then
          REPLY[ID]=data
         end
         if BLOCK_IP[data:sub(-4)] and string.byte(data:sub(-5,-5))==4 then
@@ -77,18 +109,16 @@ local function listener(proxy, forwarder)
     if data and #data > 0 then
       local domain = (data:sub(14, -6):gsub("[^%w]", "."))
       local ID = data:sub(1, 2)
-      local QTYPE = string.byte(data:sub(-3,-2),1,1)+256*string.byte(data:sub(-4,-3),1,1)
+      -- local QTYPE = string.byte(data:sub(-3,-2),1,1)+256*string.byte(data:sub(-4,-3),1,1)
       -- print(string.byte(ID,1),string.byte(ID,2), domain)
-      if not BLOCK_QTYPE[QTYPE] then
-       IP[ID], PORT[ID], DOMAIN[ID], ANSWERS[ID] = ip, port, domain, 0
-       for _, server in ipairs(SERVERS) do
-         local dns_ip, dns_port = string.match(server, "([^:]*):?(.*)")
-         dns_port = tonumber(dns_port) or 53
-         forwarder:sendto(data, dns_ip, dns_port)
-       end
-       busy = true
-       if task.count() == 1 then task.go(replier, proxy, forwarder) end
+      IP[ID], PORT[ID], DOMAIN[ID], ANSWERS[ID] = ip, port, domain, 0
+      for _, server in ipairs(SERVERS) do
+        local dns_ip, dns_port = string.match(server, "([^:]*):?(.*)")
+        dns_port = tonumber(dns_port) or 53
+        forwarder:sendto(data, dns_ip, dns_port)
       end
+      busy = true
+      if task.count() == 1 then task.go(replier, proxy, forwarder) end
     end
     task.sleep(0.02)
   end
