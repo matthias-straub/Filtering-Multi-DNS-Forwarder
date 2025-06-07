@@ -48,15 +48,10 @@ server=/adguard.com/94.140.14.33
 #Prevent Apple Private Relay:
 
 host-record=mask.icloud.com,0.0.0.0
-
 host-record=mask-api.icloud.com,0.0.0.0
-
 host-record=mask-h2.icloud.com,0.0.0.0
-
 host-record=mask-api.fe2.apple-dns.net,0.0.0.0
-
 host-record=mask.apple-dns.net,0.0.0.0
-
 host-record=safebrowsing-proxy.g.aaplimg.com,0.0.0.0
 
 #Additional recommended settings:
