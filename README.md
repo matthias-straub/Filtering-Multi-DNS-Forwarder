@@ -57,9 +57,7 @@ host-record=safebrowsing-proxy.g.aaplimg.com,0.0.0.0
 #Additional recommended settings:
 
 dns-forward-max=1000
-
 cache-size=10000
-
 strict-order
 
 ```
